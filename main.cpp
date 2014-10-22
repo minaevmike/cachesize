@@ -27,14 +27,24 @@ static inline uint64_t rdtsc(void)
 
 int main() {
     int *data = (int *)malloc(data_size * sizeof(int));
+    int *data1 = (int *)malloc(data_size * sizeof(int));
 	if( data == NULL) {
 		printf("Bad news\n");
 		return 0;
 	}
+	srand(time(NULL));
+	for (int i = 0;i < data_size; i++) {
+		data[i] = rand();
+	}
+	// For cache miss
+	for (int i = 0;i < data_size; i++) {
+		data1[i] = rand();
+	}
 	int *p, d;
 	FILE *f = fopen("data.txt", "w+");
-    int steps[] = { 1*KB, 4*KB, 8*KB, 16*KB, 24 * KB, 32*KB, 40 * KB, 48 * KB,  64*KB, 128*KB, 164 * KB, 220 * KB,
-                    256*KB, 300 * KB, 368*KB, 512*KB, 1 * MB, 2 * MB, 3 * MB, 4 * MB, 
+    //int steps[] = { 1*KB, 4*KB, 8*KB, 16*KB, 32*KB, 64*KB, 128*KB, 256*KB, 512*KB, 1 * MB, 2 * MB, 4 * MB, 8 * MB, 16 * MB};
+    int steps[] = { 1*KB, 4*KB, 8*KB, 16*KB, 24 * KB, 32*KB, 48 * KB,  64*KB, 128*KB, 
+                    256*KB, 384 * KB, 512*KB, 1 * MB, 2 * MB, 3 * MB, 4 * MB, 
                     5 * MB, 6 * MB, 7 * MB, 8 * MB, 9 * MB};
 	uint64_t taktsStart, taktsEnd;
 	long long start, end;
