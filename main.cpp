@@ -26,22 +26,12 @@ static inline uint64_t rdtsc(void)
 }
 
 int main() {
-    // allocate memory and lock
-    /*void* map = mmap(NULL, (size_t)data_size, PROT_READ | PROT_WRITE, 
-                     MAP_ANONYMOUS | MAP_PRIVATE, 0, 0);
-    if (map == MAP_FAILED) {
-        return 0;
-    }*/
     int *data = (int *)malloc(data_size * sizeof(int));
 	if( data == NULL) {
 		printf("Bad news\n");
 		return 0;
 	}
 	int *p, d;
-    // write all to avoid paging on demand
-    for (int i = 0;i< data_size / sizeof(int);i++) {
-        data[i]++;
-    }
 	FILE *f = fopen("data.txt", "w+");
     int steps[] = { 1*KB, 4*KB, 8*KB, 16*KB, 24 * KB, 32*KB, 40 * KB, 48 * KB,  64*KB, 128*KB, 164 * KB, 220 * KB,
                     256*KB, 300 * KB, 368*KB, 512*KB, 1 * MB, 2 * MB, 3 * MB, 4 * MB, 
@@ -69,7 +59,6 @@ int main() {
         printf("%dKB time: %lf %lf ns %" PRIu64 "\n", steps[i] / KB, totalTime, totalTime / (repeats * times * 128) * 1e9, totalTakts);
     }
 	fclose(f);
-    //munmap(map, (size_t)data_size);
 	system("gnuplot -persist cmd");
 	system("gnuplot -persist ns");
     return 0;
